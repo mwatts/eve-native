@@ -33,7 +33,7 @@ export class Connection {
       // @NOTE: this doesn't gracefully handle partial processing of the queue.
       while(this._queue.length) {
         let payload = this._queue.shift();
-        if (!(payload == undefined))
+        if (!(payload === undefined))
           this.ws.send(payload);
       }
     }
