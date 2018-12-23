@@ -13,11 +13,12 @@ import colorFunction from "postcss-color-function";
 function createBundle(name, entry, moduleName) {
   if(moduleName === undefined) moduleName = name;
   return {
-    moduleName,
-    entry,
-    dest: `./dist/${name}.js`,
-
-    format: "iife",
+    input: entry,
+    output: {
+      file: `./dist/${name}.js`,
+      format: "iife",
+      name: moduleName
+    },
     plugins: [
       multiEntry(),
       resolve({main: true, browser: true}),
