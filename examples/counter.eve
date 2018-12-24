@@ -36,7 +36,7 @@ end
 Add some counters programatically. To make `n` unique and independent counters, we need to add something to the committed counter that makes it unique. Since `sort` = `{1, 2, 3, 4}`, when we add it to the counter record we get 4 different counters. As an added bonus, we can use it to choose what order to display our counters in. We also add one `#fancy` counter, which is a standard counter with new styling.
 
 search
-  sort = math/range[start: 1 stop: 4]
+  sort = math/range[start: 1 to: 4]
 commit
   [#counter sort count: 0]
   [#counter #fancy sort: 5 count: 0]
