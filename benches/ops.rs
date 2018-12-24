@@ -21,7 +21,7 @@ pub fn round_holder_compute_output_rounds_bench(b:&mut Bencher) {
 }
 
 fn test_solver(b: &mut Bencher, code: &str, setup:&str) {
-    let mut program = Program::new();
+    let mut program = Program::new("test_solver");
 
     let to_test = parse_string(&mut program.state.interner, code, "test", false).pop().unwrap();
     let solver = Solver::new(&mut program.state.interner, 0, 0, None, &to_test.constraints);

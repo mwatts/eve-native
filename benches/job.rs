@@ -5,7 +5,7 @@ extern crate time;
 extern crate eve;
 extern crate csv;
 
-use eve::ops::{Program, Internable};
+use eve::ops::{Program};
 use test::Bencher;
 
 
@@ -214,7 +214,7 @@ pub fn job_4b(b: &mut Bencher) {
 //        AND k.id = mk.keyword_id
 //        AND it.id = mi_idx.info_type_id;
 
-    let mut program = Program::new();
+    let mut program = Program::new("job_4b");
     load(&mut program);
     program.block("job_4b", r#"
         search
@@ -264,7 +264,7 @@ pub fn job_4b(b: &mut Bencher) {
 // end
 #[bench]
 pub fn job_1b(b: &mut Bencher) {
-    let mut program = Program::new();
+    let mut program = Program::new("job_1b");
     load(&mut program);
     // program.block("job_1b", r#"
     //     search

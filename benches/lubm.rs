@@ -280,7 +280,7 @@ fn setup(program: &mut Program, size:usize) {
 }
 
 pub fn do_bench(b: &mut Bencher, name:&str, func: fn(&mut Program)) {
-    let mut program = Program::new();
+    let mut program = Program::new(name);
     setup(&mut program, 1);
 
     func(&mut program);
