@@ -180,8 +180,8 @@ export class Canvas extends Library {
           ctx.fillStyle = fillStyle;
           ctx.strokeStyle = strokeStyle;
           ctx.lineWidth = lineWidth;
-          ctx.lineCap = lineCap as CanvasLineCap;
-          ctx.lineJoin = lineJoin as CanvasLineJoin;
+          ctx.lineCap = lineCap;
+          ctx.lineJoin = lineJoin;
           if(style.strokeStyle) ctx.stroke(cached);
           if(style.fillStyle || !style.strokeStyle) ctx.fill(cached);
 
