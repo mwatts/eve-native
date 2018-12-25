@@ -11,7 +11,7 @@ use indexes::fnv::FnvHasher;
 use std::hash::{BuildHasherDefault};
 use std::collections::hash_map::{Entry};
 use std::iter::{self, Iterator, repeat};
-use std::collections::{BTreeMap, HashMap, BTreeSet, btree_map};
+use std::collections::{BTreeMap, HashMap, btree_map};
 use compiler::{FunctionKind};
 
 extern crate term_painter;

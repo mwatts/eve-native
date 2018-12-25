@@ -4,11 +4,12 @@ use self::ws::{Sender as WSSender, Message};
 extern crate serde_json;
 
 use rand::{self, Rng};
+use std::error::Error;
 use std::ops::Deref;
 use std::path::{PathBuf};
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{self, Sender};
-use std::thread::{self, JoinHandle};
+use std::thread::{self};
 use std::collections::HashSet;
 use super::super::indexes::{WatchDiff};
 use super::super::ops::{Internable, Interner, RawChange, RunLoop, RunLoopMessage, MetaMessage, ProgramRunner};
@@ -168,8 +169,10 @@ impl EditorWatcher {
                             changes.push(make_change(av_id.clone(), "value", output.v.clone()));
                             changes.push(make_change_str(av_id.clone(), "change", kind));
                         }
-                        outgoing.send(RunLoopMessage::Transaction(changes));
-
+                        match outgoing.send(RunLoopMessage::Transaction(changes)) {
+                            Ok(_) => {},
+                            Err(e) => { println!("[{}] Send failed: {}", "make_meta_thread".to_owned(), &e.description());}
+                        }
                     },
                     Ok(msg) => panic!("Unknown meta message: {:?}", msg),
                     Err(_) => {

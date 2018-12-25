@@ -70,7 +70,7 @@ impl Router {
                         }
                     }
                     Err(err) => {
-                        if let Some(cause) = err.cause() {
+                        if let Some(cause) = err.source() {
                             println!("{} Receiving failed: {} due to {}\n",
                                      BrightRed.paint("Error: "), err.description(),
                                      cause);

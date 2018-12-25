@@ -22,15 +22,15 @@ use std::hash::{Hash, Hasher};
 use std::iter::{Iterator, FromIterator};
 use std::fmt;
 use watchers::{Watcher};
-use std::sync::mpsc::{Sender, Receiver, SendError};
+use std::sync::mpsc::{Sender, Receiver};
 use std::sync::mpsc;
 use serde::ser::{Serialize, Serializer};
 use serde::de::{Deserialize, Deserializer, Visitor};
 use std::error::Error;
 use std::thread::{self, JoinHandle};
 use std::io::{Write, BufReader, BufWriter};
-use std::fs::{OpenOptions, File, canonicalize};
-use std::path::{Path, PathBuf};
+use std::fs::{OpenOptions, File};
+use std::path::{PathBuf};
 use std::f32::consts::{PI};
 use std::mem;
 use std::usize;
@@ -1244,7 +1244,7 @@ pub fn make_register_mask(fields: Vec<&Field>) -> u64 {
     let mut mask = 0;
     for field in fields {
         match field {
-            &Field::Register(r) => mask = set_bit(mask, (r % 64)),
+            &Field::Register(r) => mask = set_bit(mask, r % 64),
             _ => {},
         }
     }
@@ -2629,7 +2629,7 @@ impl MetaMessage {
                     inputs: MetaMessage::collapse_changes(inputs),
                     outputs: MetaMessage::collapse_changes(outputs)
                 }
-            }
+            },
             _ => self
         }
     }
@@ -3616,9 +3616,13 @@ impl ProgramRunner {
                             removed_blocks.extend(removed.drain().map(|block| block.name.to_owned()));
                         }
 
-                        echo_channel.send(RunLoopMessage::CodeTransaction(added_blocks, removed_blocks));
+                        let send_result = echo_channel.send(RunLoopMessage::CodeTransaction(added_blocks, removed_blocks));
+                        match send_result {
+                            Ok(_) => {},
+                            Err(e) => { println!("[{}] Send failed: {}", &program.name, &e.description()); }
+                        }
                     }
-                    (Ok(RunLoopMessage::Transaction(v)), true) => {},
+                    (Ok(RunLoopMessage::Transaction(_)), true) => {},
                     (Ok(RunLoopMessage::Transaction(v)), false) => {
                         println!("[{}] Txn started", &program.name);
                         let start_ns = time::precise_time_ns();
@@ -3631,7 +3635,10 @@ impl ProgramRunner {
                         if let Some(ref meta_chan) = meta_channel {
                             let mut meta_message = MetaMessage::Transaction{inputs: vec![], outputs: vec![]};
                             txn.exec_meta(&mut program, &mut persistence_channel, Some(&mut meta_message));
-                            meta_chan.send(meta_message.collapse());
+                            match meta_chan.send(meta_message.collapse()) {
+                                Ok(_) => {}
+                                Err(e) => { println!("[{}] Send failed: {}", &program.name, &e.description()); }
+                            }
                         } else {
                             txn.exec(&mut program, &mut persistence_channel);
                         }
@@ -3641,7 +3648,7 @@ impl ProgramRunner {
                         let time = (end_ns - start_ns) as f64;
                         println!("[{}] Txn took {:?} - {:?} insts ({:?} ns) - {:?} inserts ({:?} ns)", &program.name, time / 1_000_000.0, txn.frame.counters.instructions, (time / (txn.frame.counters.instructions as f64)).floor(), txn.frame.counters.inserts, (time / (txn.frame.counters.inserts as f64)).floor());
                     }
-                    (Ok(RunLoopMessage::RemoteTransaction(v)), true) => {},
+                    (Ok(RunLoopMessage::RemoteTransaction(_)), true) => {},
                     (Ok(RunLoopMessage::RemoteTransaction(v)), false) => {
                         let start_ns = time::precise_time_ns();
                         println!("[{}] Remote txn started", &program.name);

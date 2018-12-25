@@ -186,7 +186,7 @@ impl ClientHandler {
                     Err(err) => println!("ERROR: {:?}", err)
                 }
             }
-        });
+        }).unwrap();
     }
 }
 
