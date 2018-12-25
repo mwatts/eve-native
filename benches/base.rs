@@ -3,12 +3,11 @@
 extern crate eve;
 extern crate test;
 
-use eve::ops::{Program, EstimateIterPool, Internable, CodeTransaction, Transaction, RawChange};
-use eve::compiler::{parse_file};
+use eve::compiler::parse_file;
+use eve::ops::{CodeTransaction, EstimateIterPool, Internable, Program, RawChange, Transaction};
 use test::Bencher;
 
-
-fn make_program(paths:Vec<&str>) -> Program {
+fn make_program(paths: Vec<&str>) -> Program {
     let mut program = Program::new("make_program");
     //let mut iter_pool = EstimateIterPool::new();
 
@@ -30,20 +29,36 @@ fn file_bench(b: &mut Bencher, path: &str) {
     let mut ix = 1;
     b.iter(|| {
         let v = vec![
-            RawChange { e: Internable::String("tick".to_string()), a: Internable::String("tag".to_string()), v: Internable::String("time".to_string()), n: Internable::Null, count: 1 },
-            RawChange { e: Internable::String("tick".to_string()), a: Internable::String("tick".to_string()), v: Internable::from_number(ix as f32), n: Internable::Null, count: 1 }
+            RawChange {
+                e: Internable::String("tick".to_string()),
+                a: Internable::String("tag".to_string()),
+                v: Internable::String("time".to_string()),
+                n: Internable::Null,
+                count: 1,
+            },
+            RawChange {
+                e: Internable::String("tick".to_string()),
+                a: Internable::String("tick".to_string()),
+                v: Internable::from_number(ix as f32),
+                n: Internable::Null,
+                count: 1,
+            },
         ];
         let mut txn = Transaction::new(&mut iter_pool);
         for cur in v {
             txn.input_change(cur.to_change(&mut program.state.interner));
-        };
+        }
         txn.exec(&mut program, &mut persistence_channel);
         ix += 1;
     });
 }
 
 #[bench]
-pub fn base_balls(b: &mut Bencher) { file_bench(b, "benches/balls.eve"); }
+pub fn base_balls(b: &mut Bencher) {
+    file_bench(b, "benches/balls.eve");
+}
 
 #[bench]
-pub fn base_infini_flappy(b: &mut Bencher) { file_bench(b, "benches/infini-flappy.eve"); }
+pub fn base_infini_flappy(b: &mut Bencher) {
+    file_bench(b, "benches/infini-flappy.eve");
+}

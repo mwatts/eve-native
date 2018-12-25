@@ -2463,8 +2463,8 @@ pub fn compilation_to_blocks(
     let mut subs: Vec<&mut SubBlock> = comp.sub_blocks.iter_mut().collect();
     while subs.len() > 0 {
         let sub_name = format!("{}|sub_block|{}", block_name, sub_ix);
-        let mut cur = subs.pop().unwrap();
-        let mut sub_comp = cur.get_mut_compilation();
+        let cur = subs.pop().unwrap();
+        let sub_comp = cur.get_mut_compilation();
         if sub_comp.constraints.len() > 0 {
             sub_comp.finalize();
             if debug {

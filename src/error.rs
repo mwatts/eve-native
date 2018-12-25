@@ -1,10 +1,10 @@
 extern crate term_painter;
 
-use combinators::{Span, ParseResult, Pos};
-use compiler::{Node};
-use std::fmt;
-use self::term_painter::ToStyle;
 use self::term_painter::Color::*;
+use self::term_painter::ToStyle;
+use combinators::{ParseResult, Pos, Span};
+use compiler::Node;
+use std::fmt;
 
 #[derive(Debug, Clone, Copy)]
 pub enum ParseError {
@@ -13,7 +13,7 @@ pub enum ParseError {
     InvalidBlock,
     MissingEnd,
     MissingUpdate,
-    NumberOverflow()
+    NumberOverflow(),
 }
 
 impl fmt::Display for ParseError {
@@ -32,7 +32,7 @@ impl fmt::Display for ParseError {
 #[derive(Debug, Clone)]
 pub struct CompileError {
     pub span: Span,
-    pub error: Error
+    pub error: Error,
 }
 
 #[derive(Debug, Clone)]
@@ -58,25 +58,29 @@ impl fmt::Display for Error {
     }
 }
 
-
-fn format_error_source(span:&Span, lines:&Vec<&str>) {
+fn format_error_source(span: &Span, lines: &Vec<&str>) {
     let start = &span.start;
     let stop = &span.stop;
     let start_line = start.line;
     let stop_line = stop.line;
     let mut line_marker = String::new();
-    for line_ix in start_line..stop_line+1 {
+    for line_ix in start_line..stop_line + 1 {
         line_marker.push_str(&format!(" {}| ", line_ix + 1));
         print!("{}", BrightYellow.paint(&line_marker[..]));
-        print!("{}",lines[line_ix]);
+        print!("{}", lines[line_ix]);
         print!("\n");
-
     }
     if span.single_line() {
-        for _ in 0..line_marker.len() - 1 { print!(" "); }
-        for _ in 0..start.ch + 1 { print!(" "); }
-        print!("{}",BrightRed.paint("^"));
-        for _ in 0..(stop.ch - start.ch - 1) { print!("{}", BrightRed.paint("-")); }
+        for _ in 0..line_marker.len() - 1 {
+            print!(" ");
+        }
+        for _ in 0..start.ch + 1 {
+            print!(" ");
+        }
+        print!("{}", BrightRed.paint("^"));
+        for _ in 0..(stop.ch - start.ch - 1) {
+            print!("{}", BrightRed.paint("-"));
+        }
         print!("\n");
     }
 }
@@ -84,19 +88,27 @@ fn format_error_source(span:&Span, lines:&Vec<&str>) {
 pub fn from_parse_error<'a>(error: &ParseResult<Node<'a>>) -> CompileError {
     match error {
         &ParseResult::Error(ref info, err) => {
-            let start = Pos { line:info.line, ch:info.ch, pos:info.pos };
+            let start = Pos {
+                line: info.line,
+                ch: info.ch,
+                pos: info.pos,
+            };
             let mut stop = start.clone();
             stop.ch += 1;
             stop.pos += 1;
-            CompileError { span: Span {start, stop} , error: Error::ParseError(err) }
+            CompileError {
+                span: Span { start, stop },
+                error: Error::ParseError(err),
+            }
         }
-        _ => { panic!("Passed non-parse error to from_parse_error"); }
+        _ => {
+            panic!("Passed non-parse error to from_parse_error");
+        }
     }
-
 }
 
-pub fn report_errors(errors: &Vec<CompileError>, path:&str, source:&str) {
-    let lines:Vec<&str> = source.split("\n").collect();
+pub fn report_errors(errors: &Vec<CompileError>, path: &str, source: &str) {
+    let lines: Vec<&str> = source.split("\n").collect();
     let open = format!("\n----------------------------------------- {}\n", path);
     let close = "-".repeat(open.len() - 2);
     println!("{}", BrightCyan.paint(&open));
