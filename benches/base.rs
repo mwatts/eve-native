@@ -10,7 +10,7 @@ use test::Bencher;
 
 fn make_program(paths:Vec<&str>) -> Program {
     let mut program = Program::new("make_program");
-    let mut iter_pool = EstimateIterPool::new();
+    //let mut iter_pool = EstimateIterPool::new();
 
     let mut blocks = vec![];
     for path in paths {

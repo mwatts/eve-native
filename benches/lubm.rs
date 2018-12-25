@@ -5,7 +5,7 @@ extern crate time;
 extern crate eve;
 
 use std::num::Wrapping;
-use eve::ops::{Program, make_scan, Constraint, Block, register};
+use eve::ops::{Program};
 use std::collections::HashMap;
 use test::Bencher;
 
@@ -260,7 +260,7 @@ fn generate(program: &mut Program, university_count:usize) -> Vec<(u32,u32,u32)>
             }
         }
     }
-    // println!("undergrad count: {:?}", counter);
+    println!("undergrad count: {:?}", counter);
     eavs
 }
 
@@ -269,14 +269,14 @@ fn setup(program: &mut Program, size:usize) {
     let mut start_ns = time::precise_time_ns();
     let eavs = generate(program, size);
     let mut end_ns = time::precise_time_ns();
-    // println!("Gen took {:?}", (end_ns - start_ns) as f64 / 1_000_000.0);
-    // println!("size: {:?}", eavs.len());
+    println!("Gen took {:?}", (end_ns - start_ns) as f64 / 1_000_000.0);
+    println!("size: {:?}", eavs.len());
     start_ns = time::precise_time_ns();
     for (e,a,v) in eavs {
         program.raw_insert(e,a,v,0,1);
     }
     end_ns = time::precise_time_ns();
-    // println!("Insert took {:?}", (end_ns - start_ns) as f64 / 1_000_000.0);
+    println!("Insert took {:?}", (end_ns - start_ns) as f64 / 1_000_000.0);
 }
 
 pub fn do_bench(b: &mut Bencher, name:&str, func: fn(&mut Program)) {
