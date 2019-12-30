@@ -1,9 +1,7 @@
 extern crate serde_json;
 
 use super::super::indexes::{RawRemoteChange, WatchDiff};
-use super::super::ops::{
-    s, Internable, Interned, Interner, RawChange, RunLoopMessage,
-};
+use super::super::ops::{s, Internable, Interned, Interner, RawChange, RunLoopMessage};
 use super::Watcher;
 
 use std::collections::HashMap;

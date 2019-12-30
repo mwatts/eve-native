@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate eve;
 
-use eve::ops::{Program, CodeTransaction};
-use eve::compiler::{parse_string};
+use eve::compiler::parse_string;
+use eve::ops::{CodeTransaction, Program};
 
 //--------------------------------------------------------------------
 // Basic binds
@@ -142,7 +142,6 @@ test!(base_join_many_values, {
         [#success]
     end
 });
-
 
 test!(base_join_binary, {
     commit
@@ -345,7 +344,6 @@ test!(base_interpolation_bind_string, {
         [#success]
     end
 });
-
 
 test!(base_interpolation_bind_number, {
     search
@@ -1887,7 +1885,6 @@ test!(base_aggregate_next, {
     end
 });
 
-
 test!(base_aggregate_next_from, {
     search
         foo = [#foo value]
@@ -1997,7 +1994,6 @@ test!(base_aggregate_next_remove, {
         [#success]
     end
 });
-
 
 test!(base_aggregate_next_rounds, {
     search
@@ -2123,7 +2119,6 @@ test!(base_aggregate_prev_remove, {
         [#success]
     end
 });
-
 
 test!(base_aggregate_prev_rounds, {
     search

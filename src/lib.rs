@@ -26,13 +26,13 @@ pub mod ops;
 #[macro_use]
 pub mod combinators;
 
-pub mod paths;
 pub mod compiler;
 pub mod error;
 pub mod indexes;
-pub mod parser;
-pub mod solver;
 pub mod numerics;
+pub mod parser;
+pub mod paths;
+pub mod solver;
 pub mod watchers;
 
 #[macro_use]
