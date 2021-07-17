@@ -16,7 +16,7 @@
   "author": "Eve Team",
   "license": "UNLICENSED",
   "dependencies": {
-    "@types/vis": "^4.21.9",
+    "@types/vis": "^4.21.22",
     "codemirror": "^5.42.2",
     "codemirror-mode-eve": "0.0.1",
     "fsevents": "1.2.4",
