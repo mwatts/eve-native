@@ -7,7 +7,7 @@ authors = ["Chris Granger <ibdknox@gmail.com>"]
 debug = true
 
 [dev-dependencies]
-csv = "0.14"
+csv = "1.1"
 
 [dependencies]
 rand = "0.3.15"
